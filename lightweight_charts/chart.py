@@ -32,7 +32,7 @@ class PyWV:
         while 1:
             arg = self.queue.get()
             if arg in ('start', 'show', 'hide', 'exit'):
-                webview.start(debug=self.debug) if arg == 'start' else getattr(self.webview, arg)()
+                webview.start(gui=self._gui,debug=self.debug) if arg == 'start' else getattr(self.webview, arg)()
                 self.exit.set() if arg in ('start', 'exit') else None
             else:
                 try:
@@ -47,10 +47,11 @@ class PyWV:
 class Chart(LWC):
     def __init__(self, volume_enabled: bool = True, width: int = 800, height: int = 600, x: int = None, y: int = None,
                  on_top: bool = False, debug: bool = False, api: object = None, topbar: bool = False, searchbox: bool = False,
-                 inner_width: float = 1.0, inner_height: float = 1.0, dynamic_loading: bool = False):
+                 inner_width: float = 1.0, inner_height: float = 1.0, dynamic_loading: bool = False, gui: str = 'qt'):
         super().__init__(volume_enabled, inner_width, inner_height, dynamic_loading)
         self._emit = mp.Queue()
         self._q = mp.Queue()
+        self._gui = gui
         self._script_func = self._q.put
         self._exit = mp.Event()
         self._loaded = mp.Event()
