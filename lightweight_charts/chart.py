@@ -17,8 +17,9 @@ class CallbackAPI:
 
 
 class PyWV:
-    def __init__(self, q, exit, loaded, html, width, height, x, y, on_top, debug, emit):
+    def __init__(self, q, exit, loaded, html, width, height, x, y, on_top, debug, emit, gui):
         self.queue = q
+        self._gui = gui
         self.exit = exit
         self.loaded = loaded
         self.debug = debug
@@ -56,7 +57,7 @@ class Chart(LWC):
         self._exit = mp.Event()
         self._loaded = mp.Event()
         self._process = mp.Process(target=PyWV, args=(self._q, self._exit, self._loaded, self._html,
-                                                      width, height, x, y, on_top, debug, self._emit), daemon=True)
+                                                      width, height, x, y, on_top, debug, self._emit, self._gui), daemon=True)
         self._process.start()
         self._create_chart()
 
